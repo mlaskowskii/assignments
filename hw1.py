@@ -28,8 +28,9 @@ def poland_cases_by_date(day: int, month: int, year: int = 2020) -> int:
     :return: Number of cases on a given date as an integer
     """
     
-    # Your code goes here (remove pass)
-    pass
+    df=confirmed_cases.groupby("Country/Region").sum()
+    return df.loc["Poland"][f"{month}/{day}/{year-2000}"]
+
 
 
 def top5_countries_by_date(day: int, month: int, year: int = 2020) -> List[str]:
@@ -48,8 +49,8 @@ def top5_countries_by_date(day: int, month: int, year: int = 2020) -> List[str]:
     :return: A list of strings with the names of the coutires
     """
 
-    # Your code goes here (remove pass)
-    pass
+    df=confirmed_cases.groupby("Country/Region").sum().sort_values(by=[f"{month}/{day}/{year-2000}"], ascending=False)
+    return list(df.index)[0:5]
 
 # Function name is wrong, read the pydoc
 def no_new_cases_count(day: int, month: int, year: int = 2020) -> int:
@@ -69,5 +70,6 @@ def no_new_cases_count(day: int, month: int, year: int = 2020) -> int:
     :return: Number of countries/regions where the count has not changed in a day
     """
     
-    # Your code goes here (remove pass)
-    pass
+    df=confirmed_cases.groupby("Country/Region").sum()
+    a=df.columns.get_loc(f"{month}/{day}/{year-2000}")
+    return sum((df.iloc[:,a]-df.iloc[:,a-1])==0)
